@@ -854,7 +854,7 @@ h5 {
    SECTION: GALLERY CAROUSEL
    ===================== */
 .section-gallery {
-  padding: 100px 0;
+  padding: 100px 0 60px;
   background: var(--cream);
   overflow: hidden;
 }
@@ -901,7 +901,10 @@ h5 {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: -280px;
+  padding-bottom: 40px;
+  position: relative;
+  z-index: 2;
 }
 
 .gallery-carousel__btn {
@@ -933,6 +936,7 @@ h5 {
   text-align: center;
   color: var(--white);
   overflow: hidden;
+  margin-bottom: 40px;
 }
 
 .section-cta__bg {
@@ -1972,6 +1976,9 @@ h5 {
 
   .gallery-carousel {
     padding: 0 24px;
+  }
+  .gallery-carousel .glide__track {
+    overflow: hidden;
   }
 
   .features-carousel__btn {
