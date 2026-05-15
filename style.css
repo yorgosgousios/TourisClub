@@ -581,7 +581,7 @@ h5 {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 18px;
-  color: var(--gold);
+  color: var(--white);
   margin-bottom: 12px;
   opacity: 0.9;
 }
@@ -653,7 +653,7 @@ h5 {
 }
 
 .hero-carousel .glide__bullet--active {
-  background: var(--gold);
+  background: var(--white);
   width: 48px;
 }
 
@@ -693,7 +693,7 @@ h5 {
 .section-intro__divider {
   width: 60px;
   height: 2px;
-  background: var(--gold);
+  background: var(--black);
   margin: 0 auto 32px;
 }
 
@@ -835,7 +835,7 @@ h5 {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--white);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -960,7 +960,7 @@ h5 {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 18px;
-  color: var(--gold);
+  color: var(--white);
   margin-bottom: 12px;
 }
 
@@ -1046,7 +1046,7 @@ h5 {
 }
 
 .footer-grid ul a:hover {
-  color: var(--gold);
+  color: var(--white);
 }
 
 .footer-grid__contact p {
@@ -1058,7 +1058,7 @@ h5 {
 }
 
 .footer-grid__contact i {
-  color: var(--gold);
+  color: var(--white);
   width: 16px;
   margin-top: 3px;
 }
@@ -1140,7 +1140,7 @@ h5 {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 18px;
-  color: var(--gold);
+  color: var(--white);
 }
 
 /* ---- Page Intro ---- */
@@ -1171,7 +1171,7 @@ h5 {
 .page-intro__divider {
   width: 60px;
   height: 2px;
-  background: var(--gold);
+  background: var(--black);
   margin: 0 auto 24px;
 }
 
