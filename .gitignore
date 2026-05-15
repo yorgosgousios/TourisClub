@@ -1,0 +1,10 @@
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.pdf
+*.wpress
+node_modules/
+.DS_Store
