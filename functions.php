@@ -12,11 +12,11 @@ function touris_enqueue() {
 
   // Glide.js
   wp_enqueue_style('glide-css',
-    'https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css',
+    'https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/css/glide.core.min.css',
     array(), '3.6.0'
   );
   wp_enqueue_script('glide-js',
-    'https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.min.js',
+    'https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/glide.min.js',
     array(), '3.6.0', true
   );
 
@@ -27,15 +27,49 @@ function touris_enqueue() {
   );
 
   // Theme stylesheet
-  wp_enqueue_style('touris-style', get_stylesheet_uri(), array(), '1.0');
+  wp_enqueue_style('touris-style', get_stylesheet_uri(), array(), filemtime(get_stylesheet_directory() . '/style.css'));
 
   // Theme JS
   wp_enqueue_script('touris-js',
     get_theme_file_uri('/assets/theme.js'),
-    array(), '1.0', true
+    array(), filemtime(get_theme_file_path('/assets/theme.js')), true
   );
 }
 add_action('wp_enqueue_scripts', 'touris_enqueue');
+
+
+/* =====================
+   PRODUCT INQUIRY (single-product modal)
+   ===================== */
+function touris_product_inquiry() {
+  if (!wp_verify_nonce($_POST['_wpnonce'] ?? '', 'touris_inquiry')) {
+    wp_send_json_error('Your session expired. Please reload the page and try again.', 403);
+  }
+  // Honeypot: bots fill the hidden field; pretend success so they don't retry.
+  // Neutral name + display:none so browser autofill leaves it empty.
+  if (!empty($_POST['tc_hp'])) wp_send_json_success();
+
+  $name    = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
+  $email   = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+  $phone   = sanitize_text_field(wp_unslash($_POST['phone'] ?? ''));
+  $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+  $product = sanitize_text_field(wp_unslash($_POST['product_name'] ?? ''));
+  $url     = esc_url_raw(wp_unslash($_POST['product_url'] ?? ''));
+
+  if (!$name || !is_email($email)) {
+    wp_send_json_error('Please enter your name and a valid email.', 400);
+  }
+
+  $to = (function_exists('get_field') ? get_field('footer_email', get_option('page_on_front')) : '') ?: get_option('admin_email');
+  $body = "Name: {$name}\nEmail: {$email}\nPhone: " . ($phone ?: 'N/A') . "\nProduct: {$product}\nURL: {$url}\n\nMessage:\n" . ($message ?: 'No message');
+
+  if (!wp_mail($to, 'Product Inquiry: ' . $product, $body, array('Reply-To: ' . $email))) {
+    wp_send_json_error('Sorry, we could not send your inquiry. Please email or call us directly.', 500);
+  }
+  wp_send_json_success();
+}
+add_action('admin_post_touris_product_inquiry', 'touris_product_inquiry');
+add_action('admin_post_nopriv_touris_product_inquiry', 'touris_product_inquiry');
 
 
 /* =====================

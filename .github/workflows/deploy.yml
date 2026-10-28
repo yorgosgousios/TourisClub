@@ -15,6 +15,5 @@ jobs:
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
           protocol: ftps
-          security: loose
           local-dir: ./
           server-dir: /httpdocs/wp-content/themes/touris-club-theme/

@@ -29,6 +29,7 @@ for ($i = 1; $i <= 6; $i++) {
     'type'     => $type,
     'image'    => $image ? $image['url'] : '',
     'video'    => $video ? $video['url'] : '',
+    'video_mime' => $video ? $video['mime_type'] : '',
     'poster'   => function_exists('get_field') ? get_field("slide_{$i}_poster", $pid) : false,
     'eyebrow'  => $tc("slide_{$i}_eyebrow"),
     'title'    => $title,
@@ -48,8 +49,8 @@ for ($i = 1; $i <= 6; $i++) {
         ?>
         <li class="glide__slide" data-slide-type="<?php echo esc_attr($slide['type']); ?>">
           <?php if ($slide['type'] === 'video' && $slide['video']): ?>
-            <video class="hero-carousel__video" autoplay muted loop playsinline poster="<?php echo esc_url($poster_url); ?>">
-              <source src="<?php echo esc_url($slide['video']); ?>" type="video/mp4">
+            <video class="hero-carousel__video" muted loop playsinline poster="<?php echo esc_url($poster_url); ?>">
+              <source src="<?php echo esc_url($slide['video']); ?>" type="<?php echo esc_attr($slide['video_mime']); ?>">
             </video>
           <?php else: ?>
             <div class="hero-carousel__image" style="background-image: url('<?php echo esc_url($slide['image']); ?>')"></div>

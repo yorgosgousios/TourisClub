@@ -45,7 +45,8 @@ for ($i = 1; $i <= 6; $i++) {
 
     <!-- Right: Info -->
     <div class="single-product__info">
-      <a href="<?php echo esc_url(get_permalink(get_page_by_path('memorabilia') ?: get_page_by_path('memorabilia'))); ?>" class="single-product__back">
+      <?php $shop_pages = get_pages(array('meta_key' => '_wp_page_template', 'meta_value' => 'page-shop.php', 'number' => 1)); ?>
+      <a href="<?php echo esc_url($shop_pages ? get_permalink($shop_pages[0]) : home_url('/')); ?>" class="single-product__back">
         <i class="fas fa-arrow-left"></i> Back to Shop
       </a>
 
@@ -79,9 +80,12 @@ for ($i = 1; $i <= 6; $i++) {
     <h3 class="interest-modal__title">Interested in this product?</h3>
     <p class="interest-modal__subtitle">Fill in your details and we'll get back to you.</p>
 
-    <form class="interest-modal__form" id="interest-form">
+    <form class="interest-modal__form" id="interest-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+      <input type="hidden" name="action" value="touris_product_inquiry">
+      <?php wp_nonce_field('touris_inquiry'); ?>
       <input type="hidden" name="product_name" value="<?php the_title_attribute(); ?>">
-      <input type="hidden" name="product_url" value="<?php the_permalink(); ?>">
+      <input type="hidden" name="product_url" value="<?php echo esc_url(get_permalink()); ?>">
+      <input type="text" name="tc_hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;">
 
       <div class="interest-modal__field">
         <label for="interest-name">Full Name *</label>
@@ -104,10 +108,11 @@ for ($i = 1; $i <= 6; $i++) {
       </div>
 
       <button type="submit" class="btn btn--olive interest-modal__submit">Send Inquiry</button>
-      <div class="interest-modal__success" id="interest-success" style="display:none;">
-        <i class="fas fa-check-circle"></i> Thank you! We'll be in touch soon.
-      </div>
+      <div class="interest-modal__error" id="interest-error" role="alert" style="display:none;color:var(--terracotta-dark);margin-top:12px;"></div>
     </form>
+    <div class="interest-modal__success" id="interest-success" style="display:none;">
+      <i class="fas fa-check-circle"></i> Thank you! We'll be in touch soon.
+    </div>
   </div>
 </div>
 

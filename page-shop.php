@@ -70,10 +70,10 @@ $products = new WP_Query(array(
       <?php endif; ?>
       <div class="shop-card__content">
         <h3 class="shop-card__title"><?php the_title(); ?></h3>
-        <?php $desc = get_field('product_short_desc'); if ($desc): ?>
+        <?php $desc = function_exists('get_field') ? get_field('product_short_desc') : ''; if ($desc): ?>
           <p class="shop-card__desc"><?php echo esc_html($desc); ?></p>
         <?php endif; ?>
-        <?php $price = get_field('product_price'); if ($price): ?>
+        <?php $price = function_exists('get_field') ? get_field('product_price') : ''; if ($price): ?>
           <span class="shop-card__price"><?php echo esc_html($price); ?></span>
         <?php endif; ?>
       </div>

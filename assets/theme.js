@@ -116,7 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const manageVideos = () => {
-      const slides = heroEl.querySelectorAll(".glide__slide");
+      // Glide carousel mode adds clones; skip them so i matches heroGlide.index
+      const slides = heroEl.querySelectorAll(
+        ".glide__slide:not(.glide__slide--clone)",
+      );
       slides.forEach((slide, i) => {
         const video = slide.querySelector(".hero-carousel__video");
         if (!video) return;
@@ -260,38 +263,31 @@ document.addEventListener("DOMContentLoaded", () => {
   if (interestForm) {
     interestForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const formData = new FormData(interestForm);
-      const data = Object.fromEntries(formData);
+      const errorMsg = document.getElementById("interest-error");
+      const submitBtn = interestForm.querySelector('[type="submit"]');
+      const fail = (msg) => {
+        if (errorMsg) {
+          errorMsg.textContent =
+            msg || "Sorry, something went wrong. Please try again.";
+          errorMsg.style.display = "block";
+        }
+      };
 
-      // Send via email (using WP REST or mailto fallback)
-      const subject = encodeURIComponent(
-        "Product Inquiry: " + data.product_name,
-      );
-      const body = encodeURIComponent(
-        "Name: " +
-          data.name +
-          "\n" +
-          "Email: " +
-          data.email +
-          "\n" +
-          "Phone: " +
-          (data.phone || "N/A") +
-          "\n" +
-          "Product: " +
-          data.product_name +
-          "\n" +
-          "URL: " +
-          data.product_url +
-          "\n\n" +
-          "Message:\n" +
-          (data.message || "No message"),
-      );
+      submitBtn.disabled = true;
+      if (errorMsg) errorMsg.style.display = "none";
 
-      // Open mailto as fallback
-      window.location.href =
-        "mailto:thanostouris@gmail.com?subject=" + subject + "&body=" + body;
+      // getAttribute: form.action is shadowed by the <input name="action">
+      fetch(interestForm.getAttribute("action"), {
+        method: "POST",
+        body: new FormData(interestForm),
+      })
+        .then((res) => res.json())
+        .then((res) => (res.success ? showSuccess() : fail(res.data)))
+        .catch(() => fail())
+        .finally(() => (submitBtn.disabled = false));
+    });
 
-      // Show success
+    const showSuccess = () => {
       interestForm.style.display = "none";
       if (successMsg) successMsg.style.display = "block";
 
@@ -302,6 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
         interestForm.reset();
         if (successMsg) successMsg.style.display = "none";
       }, 3000);
-    });
+    };
   }
 });
